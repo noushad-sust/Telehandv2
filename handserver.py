@@ -82,6 +82,7 @@ class MainClass():
                 print 'configuring joint speed'
                 self.he.configjointspeed()
                 self.showmsg('connection initiated')
+
             except:
                 box.showerror('Error', 'Can\'t Connect')
         elif val=='Power ON':
@@ -114,7 +115,17 @@ class MainClass():
     def onmsg(self, msg):
         self.showmsg(msg)
         print 'msg=', msg
-
+        if  'give_init' in msg:
+            print 'sending init infor'
+            try:
+                rsp=self.he.readjoints()
+                self.ws.send_msg('hw=base='+str(self.hand.base.getlastpos())+'='+msg+':'+'success')
+                self.ws.send_msg('hw=shoulder='+str(self.hand.shoulder.getlastpos())+'='+msg+':'+'success')
+                self.ws.send_msg('hw=bicep='+str(self.hand.bicep.getlastpos())+'='+msg+':'+'success')
+                self.ws.send_msg('hw=elbow='+str(self.hand.elbow.getlastpos())+'='+msg+':'+'success')
+            except:
+                print 'cant send init'
+                pass
         try:
             info=msg.split('=')
             id=int(info[1])
@@ -144,7 +155,7 @@ class MainClass():
                 self.hand.grip_open()
                 rsp=self.he.updatejoints()
                 print 'rsp=',rsp
-
+                rsp=self.he.readjoints()
         except:
             pass
 
@@ -165,6 +176,17 @@ class MainClass():
     def handleConnected(self):
         print 'new client'
         self.showmsg('new client')
+        '''
+        try:
+            rsp=self.he.readjoints()
+            self.ws.send_msg('base='+ str(self.hand.base.lastpos)+' : '+'success' )
+            self.ws.send_msg('shoulder='+ str(self.hand.shoulder.lastpos)+' : '+'success')
+            self.ws.send_msg('bicep='+ str(self.hand.bicep.lastpos)+' : '+'success')
+            self.ws.send_msg('elbow='+ str(self.hand.elbow.lastpos)+' : '+'success')
+        except:
+            print 'cant send init'
+            pass
+        '''
 
     def handleClosed(self):
         print 'closed'

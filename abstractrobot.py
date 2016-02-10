@@ -13,7 +13,7 @@ class MyRobotHand():
         print 'My Robot Arm design: TeleHand'
         self.showonui=showonui
 
-        self.base=MyAbstractJoint(7, min=40, max=145, speed=40)
+        self.base=MyAbstractJoint(7, min=40, max=120, speed=40)
         self.shoulder=MyAbstractJoint(6, min=30, max=170, speed=40)
         self.bicep=MyAbstractJoint(5, min=10, max=100, speed=255)
         self.elbow=MyAbstractJoint(4, min=40, max=130, speed=255)
